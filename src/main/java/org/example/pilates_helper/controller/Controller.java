@@ -9,6 +9,6 @@ import java.io.IOException;
 
 public abstract class Controller extends HttpServlet {
     protected  void view(HttpServletRequest req, HttpServletResponse resp, String name) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/views/%s.jsp".formatted(name)).forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/%s.jsp".formatted(name)).forward(req, resp);
     }
 }
