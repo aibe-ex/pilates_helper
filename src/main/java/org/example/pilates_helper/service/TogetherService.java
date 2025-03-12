@@ -3,6 +3,7 @@ package org.example.pilates_helper.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.pilates_helper.model.dto.BaseLLMResponse;
+import org.example.pilates_helper.model.dto.ImageLLMResponse;
 import org.example.pilates_helper.model.dto.ModelType;
 import org.example.pilates_helper.model.dto.TogetherAPIParam;
 import org.example.pilates_helper.model.repository.TogetherRepository;
@@ -27,13 +28,16 @@ public class TogetherService {
     }
 
     public String userReasoning(String prompt) throws JsonProcessingException {
-        String promptPreProcessing = "you are pilates expert. more specific idean and concept explanation. max length 1000 character. use plain text. no markdown. use only korean language %s".formatted(prompt);
+        String promptPreProcessing = "you are pilates expert. more specific idean and concept explanation. max length 1000 character. %s. use plain text. no markdown. use only korean language use only korean character.".formatted(prompt);
         String responseText = repository.callAPI(new TogetherAPIParam(promptPreProcessing, ModelType.REASONING));
 //        System.out.println(responseText);
-        return objectMapper.readValue(responseText, BaseLLMResponse.class).choices().get(0).message().content().split("</think>")[1].trim();
+        return objectMapper.readValue(responseText, BaseLLMResponse.class).choices().get(0).message().content();
     }
 
     public String useImage(String prompt) throws JsonProcessingException {
-        return repository.callAPI(new TogetherAPIParam(prompt, ModelType.IMAGE));
+        String promptPreProcessing = ("Generate a high-resolution image of a young, athletic people with **anatomically correct proportions**, performing %s, a Pilates exercise, on a reformer, in a Korean webtoon style, like a scene from a popular webtoon. Use bright pastel colors, clear and bold lines, and dynamic poses to emphasize her strength and flexibility. The background should be a simple, clean pastel-colored gradient, with no text or complex patterns. Emphasize the character's cute and expressive facial features, showing concentration and determination. **Ensure the character's pose is natural and balanced.** Exclude any realistic details, dark shadows, or complex textures.\n").formatted(prompt);
+        String responseText = repository.callAPI(new TogetherAPIParam(promptPreProcessing, ModelType.IMAGE));
+
+        return objectMapper.readValue(responseText, ImageLLMResponse.class).data().get(0).url();
     }
 }

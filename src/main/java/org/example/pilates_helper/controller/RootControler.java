@@ -34,8 +34,12 @@ public class RootControler extends Controller {
         String basePrompt =  togetherService.useBaseModel(question);
         session.setAttribute("answer", basePrompt);
         String deepAnswer =  togetherService.userReasoning(basePrompt);
-        session.setAttribute("reasoning", deepAnswer);
+        String[] deepAnswerArr = deepAnswer.trim().split("</think>");
+        session.setAttribute("thinking", deepAnswerArr[0].split("<think>")[1]);
+        session.setAttribute("reasoning", deepAnswerArr[1]);
 
+        String image = togetherService.useImage(basePrompt);
+        session.setAttribute("image", image);
         resp.sendRedirect(req.getContextPath() + "/answer");
     }
 }
