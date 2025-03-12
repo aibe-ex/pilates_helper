@@ -7,9 +7,7 @@ import org.example.pilates_helper.model.dto.BaseLLMBody;
 import org.example.pilates_helper.model.dto.TogetherAPIParam;
 import org.example.pilates_helper.util.APIClient;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TogetherRepository implements APIClient {
     private static TogetherRepository instance = new TogetherRepository();
